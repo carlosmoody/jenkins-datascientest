@@ -104,10 +104,27 @@ rm -Rf .kube
 mkdir .kube
 ls
 cat $KUBECONFIG > .kube/config
-cp fastapi/values.yaml values.yml
-cat values.yml
-sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-helm upgrade --install app fastapi --values=values.yml --namespace dev
+cd jenkins-exam
+helm upgrade --install app examen --values=values.yml --values=dev-values.yaml --namespace dev
+'''
+        }
+
+      }
+    }
+
+    stage('Deploiement en qa') {
+      environment {
+        KUBECONFIG = credentials('config')
+      }
+      steps {
+        script {
+          sh '''
+rm -Rf .kube
+mkdir .kube
+ls
+cat $KUBECONFIG > .kube/config
+cd jenkins-exam
+helm upgrade --install app examen --values=values.yml --values=qa-values.yaml --namespace qa
 '''
         }
 
@@ -125,10 +142,8 @@ rm -Rf .kube
 mkdir .kube
 ls
 cat $KUBECONFIG > .kube/config
-cp fastapi/values.yaml values.yml
-cat values.yml
-sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-helm upgrade --install app fastapi --values=values.yml --namespace staging
+cd jenkins-exam
+helm upgrade --install app examen --values=values.yml --values=staging-values.yaml --namespace staging
 '''
         }
 
@@ -139,6 +154,9 @@ helm upgrade --install app fastapi --values=values.yml --namespace staging
       environment {
         KUBECONFIG = credentials('config')
       }
+      when {
+                branch 'main'
+        }
       steps {
         timeout(time: 15, unit: 'MINUTES') {
           input(message: 'Do you want to deploy in production ?', ok: 'Yes')
