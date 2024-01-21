@@ -193,7 +193,7 @@ helm upgrade --install app fastapi --values=values.yml --namespace prod
   environment {
     DOCKER_ID = 'carlosmoody'
     DOCKER_MOVIE_IMAGE = 'movieservice'
-    DOCKER_TAG = "v.${BUILD_ID}.0"
     DOCKER_CAST_IMAGE = 'castservice'
+    DOCKER_TAG = "${BUILD_ID}.0"
   }
 }
