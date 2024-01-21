@@ -7,11 +7,11 @@ pipeline {
           steps {
             script {
               sh '''
-              docker rm -f jenkins-movie
-              cd movie-service
-              docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG .
-              sleep 6
-              '''
+docker rm -f jenkins-movie
+cd movie-service
+docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG .
+sleep 6
+'''
             }
 
           }
@@ -21,11 +21,11 @@ pipeline {
           steps {
             script {
               sh '''
-              docker rm -f jenkins-cast
-              cd cast-service
-              docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG .
-              sleep 6
-              '''
+docker rm -f jenkins-cast
+cd cast-service
+docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG .
+sleep 6
+'''
             }
 
           }
@@ -40,9 +40,9 @@ pipeline {
           steps {
             script {
               sh '''
-              docker run -d -p 8001:8000 --name jenkins-movie $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
-              sleep 10
-              '''
+docker run -d -p 8001:8000 --name jenkins-movie $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+sleep 10
+'''
             }
 
           }
@@ -52,9 +52,9 @@ pipeline {
           steps {
             script {
               sh '''
-              docker run -d -p 8002:8000 --name jenkins-cast $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
-              sleep 10
-              '''
+docker run -d -p 8002:8000 --name jenkins-cast $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
+sleep 10
+'''
             }
 
           }
@@ -69,8 +69,8 @@ pipeline {
           steps {
             script {
               sh '''
-              curl localhost:8001
-              '''
+curl localhost:8001
+'''
             }
 
           }
@@ -80,8 +80,8 @@ pipeline {
           steps {
             script {
               sh '''
-              curl localhost:8002
-              '''
+curl localhost:8002
+'''
             }
 
           }
@@ -99,9 +99,9 @@ pipeline {
           steps {
             script {
               sh '''
-              docker login -u $DOCKER_ID -p $DOCKER_PASS
-              docker push $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG
-              '''
+docker login -u $DOCKER_ID -p $DOCKER_PASS
+docker push $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG
+'''
             }
 
           }
