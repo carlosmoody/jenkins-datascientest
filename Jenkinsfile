@@ -7,8 +7,8 @@ pipeline {
           steps {
             script {
               sh '''
-docker rm -f jenkins-movie
-docker rmi $DOCKER_ID/$DOCKER_MOVIE_IMAGE:latest
+docker rm -f jenkins-movie || true
+docker rmi $DOCKER_ID/$DOCKER_MOVIE_IMAGE:latest || true
 cd movie-service
 docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG .
 docker tag $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG $DOCKER_ID/$DOCKER_MOVIE_IMAGE:latest
@@ -23,8 +23,8 @@ sleep 6
           steps {
             script {
               sh '''
-docker rm -f jenkins-cast
-docker rmi $DOCKER_ID/$DOCKER_CAST_IMAGE:latest
+docker rm -f jenkins-cast || true
+docker rmi $DOCKER_ID/$DOCKER_CAST_IMAGE:latest || true
 cd cast-service
 docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG .
 docker tag $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG $DOCKER_ID/$DOCKER_CAST_IMAGE:latest
