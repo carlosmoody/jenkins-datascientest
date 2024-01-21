@@ -10,4 +10,7 @@ pipeline {
     }
 
   }
+  environment {
+    DOCKER_ID = 'carlosmoody'
+  }
 }
