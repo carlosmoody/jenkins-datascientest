@@ -85,7 +85,8 @@ curl localhost:8088/api/v1/cast/docs
         script {
           sh '''
 docker login -u $DOCKER_ID -p $DOCKER_PASS
-docker push $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG docker push $DOCKER_ID/$DOCKER_MOVIE_IMAGE:latest
+docker push $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG
+docker push $DOCKER_ID/$DOCKER_MOVIE_IMAGE:latest
 '''
         }
 
