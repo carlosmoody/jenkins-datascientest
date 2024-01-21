@@ -50,13 +50,13 @@ sleep 10
       }
     }
 
-    stage('Test Acceptance') {
+    stage('Test acceptance') {
       parallel {
         stage('Movie Service') {
           steps {
             script {
               sh '''
-curl localhost:8001
+curl localhost:8088/api/v1/movies/docs
 '''
             }
 
@@ -67,7 +67,7 @@ curl localhost:8001
           steps {
             script {
               sh '''
-curl localhost:8002
+curl localhost:8088/api/v1/cast/docs
 '''
             }
 
@@ -78,32 +78,15 @@ curl localhost:8002
     }
 
     stage('Docker Push') {
-      parallel {
-        stage('Docker Push') {
-          environment {
-            DOCKER_PASS = credentials('DOCKER_HUB_PASS')
-          }
-          steps {
-            script {
-              sh '''
+      environment {
+        DOCKER_PASS = credentials('DOCKER_HUB_PASS')
+      }
+      steps {
+        script {
+          sh '''
 docker login -u $DOCKER_ID -p $DOCKER_PASS
-docker push $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG
+docker push $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG docker push $DOCKER_ID/$DOCKER_MOVIE_IMAGE:latest
 '''
-            }
-
-          }
-        }
-
-        stage('error') {
-          steps {
-            script {
-              sh '''
-docker login -u $DOCKER_ID -p $DOCKER_PASS
-docker push $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
-'''
-            }
-
-          }
         }
 
       }
