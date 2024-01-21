@@ -7,7 +7,7 @@ pipeline {
           steps {
             script {
               sh '''
-docker rm -f jenkins-movie
+docker rm -f jenkins-movie cd movie-service
 docker build -t $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG .
 sleep 6
 '''
@@ -20,7 +20,7 @@ sleep 6
           steps {
             script {
               sh '''
-docker rm -f jenkins-cast
+docker rm -f jenkins-cast cd cast-service
 docker build -t $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG .
 sleep 6
 '''
@@ -105,7 +105,7 @@ docker push $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG
           }
         }
 
-        stage('') {
+        stage('error') {
           steps {
             script {
               sh '''
