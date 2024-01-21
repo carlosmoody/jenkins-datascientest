@@ -104,7 +104,7 @@ rm -Rf .kube
 mkdir .kube
 ls
 cat $KUBECONFIG > .kube/config
-cd jenkins-exam
+cd jenkins-examen
 helm upgrade --install app examen --values=values.yml --values=dev-values.yaml --namespace dev
 '''
         }
@@ -123,7 +123,7 @@ rm -Rf .kube
 mkdir .kube
 ls
 cat $KUBECONFIG > .kube/config
-cd jenkins-exam
+cd jenkins-examen
 helm upgrade --install app examen --values=values.yml --values=qa-values.yaml --namespace qa
 '''
         }
@@ -142,7 +142,7 @@ rm -Rf .kube
 mkdir .kube
 ls
 cat $KUBECONFIG > .kube/config
-cd jenkins-exam
+cd jenkins-examen
 helm upgrade --install app examen --values=values.yml --values=staging-values.yaml --namespace staging
 '''
         }
@@ -168,10 +168,8 @@ rm -Rf .kube
 mkdir .kube
 ls
 cat $KUBECONFIG > .kube/config
-cp fastapi/values.yaml values.yml
-cat values.yml
-sed -i "s+tag.*+tag: ${DOCKER_TAG}+g" values.yml
-helm upgrade --install app fastapi --values=values.yml --namespace prod
+cd jenkins-examen
+helm upgrade --install app examen --values=values.yml --values=prod-values.yaml --namespace prod
 '''
         }
 
