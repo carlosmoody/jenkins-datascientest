@@ -105,7 +105,7 @@ mkdir .kube
 ls
 cat $KUBECONFIG > .kube/config
 cd jenkins-examen
-helm upgrade --install examen --values=values.yml --values=dev-values.yaml --namespace dev .
+helm upgrade --install examen --values=values.yaml --values=dev-values.yaml --namespace dev .
 '''
         }
 
@@ -124,7 +124,7 @@ mkdir .kube
 ls
 cat $KUBECONFIG > .kube/config
 cd jenkins-examen
-helm upgrade --install examen --values=values.yml --values=qa-values.yaml --namespace qa .
+helm upgrade --install examen --values=values.yaml --values=qa-values.yaml --namespace qa .
 '''
         }
 
@@ -143,7 +143,7 @@ mkdir .kube
 ls
 cat $KUBECONFIG > .kube/config
 cd jenkins-examen
-helm upgrade --install examen --values=values.yml --values=staging-values.yaml --namespace staging .
+helm upgrade --install examen --values=values.yaml --values=staging-values.yaml --namespace staging .
 '''
         }
 
@@ -169,7 +169,7 @@ mkdir .kube
 ls
 cat $KUBECONFIG > .kube/config
 cd jenkins-examen
-helm upgrade --install examen --values=values.yml --values=prod-values.yaml --namespace prod .
+helm upgrade --install examen --values=values.yaml --values=prod-values.yaml --namespace prod .
 '''
         }
 
