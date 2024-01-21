@@ -1,0 +1,99 @@
+# Movie Service setup
+movieService:
+  name: movie-service
+
+  label: movie-service
+
+  secretName: movie-service-secret
+
+  deployment:
+    replicas: 1
+    image: "carlosmoody/movieservice:latest"
+    port: 8000
+    volumeName: movie-service-data
+    mountPath: /app/
+    pvcAccessModes: 
+      - ReadWriteOnce
+    storageClassName: local-path
+    storage: 10Gi
+
+  service: 
+    type: ClusterIP
+    protocol: TCP
+    port: 8001
+    targetPort: 8000
+
+# Movie DB
+moviedb:
+  name: movie-db
+
+  label: movie-db
+
+  secretName: movie-db-secret
+
+  sts:
+    replicas: 1
+    image: "postgres:12.1-alpine"
+    port: 5432
+    volumeName: movie-db-data
+    mountPath: /var/lib/postgresql/data/
+    pvcAccessModes: 
+      - ReadWriteOnce
+    storageClassName: local-path
+    storage: 10Gi
+
+  service: 
+    type: ClusterIP
+    port: 5432
+    
+# Cast DB
+castdb:
+  name: cast-db
+
+  label: cast-db
+
+  secretName: cast-db-secret
+
+  sts:
+    replicas: 1
+    image: "postgres:12.1-alpine"
+    port: 5432
+    volumeName: cast-db-data
+    mountPath: /var/lib/postgresql/data/
+    pvcAccessModes: 
+      - ReadWriteOnce
+    storageClassName: local-path
+    storage: 10Gi
+
+  service: 
+    type: ClusterIP
+    port: 5432
+    
+# Cast Service setup
+castService:
+  name: cast-service
+
+  label: cast-service
+
+  secretName: cast-service-secret
+
+  deployment:
+    replicas: 1
+    image: "carlosmoody/castservice:latest"
+    port: 8000
+    volumeName: cast-service-data
+    mountPath: /app/
+    pvcAccessModes: 
+      - ReadWriteOnce
+    storageClassName: local-path
+    storage: 10Gi
+
+  service: 
+    type: ClusterIP
+    protocol: TCP
+    port: 8002
+    targetPort: 8000
+
+ingress:
+  name: ingress-api
+  host: "tralongo.cloudns.eu"

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.moviedb.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.moviedb.label }}
+  serviceName: "{{ .Values.moviedb.name }}"
+  replicas: {{ .Values.moviedb.sts.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.moviedb.label }} # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: {{ .Values.moviedb.name }}
+        image: {{ .Values.moviedb.sts.image }}
+        ports:
+        - containerPort: {{ .Values.moviedb.sts.port }}
+        volumeMounts:
+        - name: {{ .Values.moviedb.sts.volumeName }}
+          mountPath: {{ .Values.moviedb.sts.mountPath }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.moviedb.sts.volumeName }}
+    spec:
+      storageClassName: {{ .Values.moviedb.sts.storageClassName }}
+      accessModes:
+        {{- range .Values.moviedb.sts.pvcAccessModes }}
+          - {{ . }}
+        {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.moviedb.sts.storage }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.moviedb.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ .Values.moviedb.label }}
+  type: {{ .Values.moviedb.service.type }}
+  ports:
+  - port: {{ .Values.moviedb.service.port }}
+---
+

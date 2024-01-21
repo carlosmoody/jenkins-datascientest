@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.castdb.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.castdb.label }}
+  serviceName: "{{ .Values.castdb.name }}"
+  replicas: {{ .Values.castdb.sts.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.castdb.label }} # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: {{ .Values.castdb.name }}
+        image: {{ .Values.castdb.sts.image }}
+        ports:
+        - containerPort: {{ .Values.castdb.sts.port }}
+        volumeMounts:
+        - name: {{ .Values.castdb.sts.volumeName }}
+          mountPath: {{ .Values.castdb.sts.mountPath }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.castdb.sts.volumeName }}
+    spec:
+      storageClassName: {{ .Values.castdb.sts.storageClassName }}
+      accessModes:
+        {{- range .Values.castdb.sts.pvcAccessModes }}
+          - {{ . }}
+        {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.castdb.sts.storage }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.castdb.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ .Values.castdb.label }}
+  type: {{ .Values.castdb.service.type }}
+  ports:
+  - port: {{ .Values.castdb.service.port }}
+---
+

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.movieService.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.movieService.label }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.movieService.label }}
+  replicas: {{ .Values.movieService.deployment.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.movieService.label }}
+    spec:
+      containers:
+      - name: {{ .Values.movieService.name }}
+        image: {{ .Values.movieService.deployment.image }} 
+        envFrom:
+            - secretRef:
+                name: {{ .Values.movieService.secretName }}
+        ports:
+        - containerPort: {{ .Values.movieService.deployment.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.movieService.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ .Values.movieService.label }}
+  type: {{ .Values.movieService.service.type }}
+  ports:
+  - protocol: {{ .Values.movieService.service.protocol }}
+    port: {{ .Values.movieService.service.port }}
+    targetPort: {{ .Values.movieService.service.targetPort }}

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.castService.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.castService.label }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.castService.label }}
+  replicas: {{ .Values.castService.deployment.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.castService.label }}
+    spec:
+      containers:
+      - name: {{ .Values.castService.name }}
+        image: {{ .Values.castService.deployment.image }} 
+        envFrom:
+            - secretRef:
+                name: {{ .Values.castService.secretName }}
+        ports:
+        - containerPort: {{ .Values.castService.deployment.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.castService.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ .Values.castService.label }}
+  type: {{ .Values.castService.service.type }}
+  ports:
+  - protocol: {{ .Values.castService.service.protocol }}
+    port: {{ .Values.castService.service.port }}
+    targetPort: {{ .Values.castService.service.targetPort }}
