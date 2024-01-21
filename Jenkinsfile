@@ -38,30 +38,13 @@ sleep 6
       }
     }
 
-    stage('Docker run') {
-      parallel {
-        stage('Movie Service') {
-          steps {
-            script {
-              sh '''
-docker run -d -p 8001:8000 --name jenkins-movie $DOCKER_ID/$DOCKER_MOVIE_IMAGE:$DOCKER_TAG
+    stage('Compose up') {
+      steps {
+        script {
+          sh '''
+docker compose up -d
 sleep 10
 '''
-            }
-
-          }
-        }
-
-        stage('Cast Service') {
-          steps {
-            script {
-              sh '''
-docker run -d -p 8002:8000 --name jenkins-cast $DOCKER_ID/$DOCKER_CAST_IMAGE:$DOCKER_TAG
-sleep 10
-'''
-            }
-
-          }
         }
 
       }
